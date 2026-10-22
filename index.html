@@ -22,23 +22,33 @@
 </head>
 <body>
 
-    <!-- Contenedor que mantendrá el iframe -->
-    <div id="contenedor" style="width: 100%; height: 100%;">
-        <iframe id="marcoResultados" src="https://docs.google.com/spreadsheets/d/16GyKH6Ae6bkp7xexO0ZCtPcJK7I3bBkRcd0mHK3fNkw/htmlview?gid=674966579#gid=674966579"></iframe>
-    </div>
+    <div id="contenedor" style="width: 100%; height: 100%;"></div>
 
     <script>
-        // Guarda tu enlace completo con /htmlview y el #gid aquí
-        const urlPlanilla = "https://docs.google.com/spreadsheets/d/16GyKH6Ae6bkp7xexO0ZCtPcJK7I3bBkRcd0mHK3fNkw/htmlview?gid=674966579#gid=674966579";
+        // 1. Pega aquí el ID de tu planilla (lo que está entre /d/ y /edit en tu enlace de Google Sheets)
+        const idPlanilla = "16GyKH6Ae6bkp7xexO0ZCtPcJK7I3bBkRcd0mHK3fNkw";
+        
+        // 2. Pega aquí el número de GID de tu pestaña TOTAL (lo que aparece después de #gid=)
+        const gidHoja = "674966579"; 
         
         // Intervalo en milisegundos (20000 = 20 segundos)
         const tiempoRecarga = 5000; 
 
-        setInterval(function() {
+        function actualizarIframe() {
             var contenedor = document.getElementById('contenedor');
-            // Recrea el iframe desde cero para forzar una consulta fresca a los servidores de Google
-            contenedor.innerHTML = '<iframe id="marcoResultados" src="' + urlPlanilla + '"></iframe>';
-        }, tiempoRecarga);
+            
+            // Creamos una URL dinámica agregando un parámetro de tiempo (?t=...) al final
+            var urlDinamica = "https://docs.google.com/spreadsheets/d/" + idPlanilla + "/htmlview?t=" + new Date().getTime() + "#gid=" + gidHoja;
+            
+            // Inyectamos el iframe con la nueva URL forzando la descarga fresca
+            contenedor.innerHTML = '<iframe id="marcoResultados" src="' + urlDinamica + '"></iframe>';
+        }
+
+        // Ejecutar inmediatamente al cargar la página
+        actualizarIframe();
+
+        // Repetir el proceso cada 20 segundos
+        setInterval(actualizarIframe, tiempoRecarga);
     </script>
 
 </body>
