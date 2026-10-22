@@ -11,12 +11,12 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            overflow: auto;
             background-color: #ffffff;
         }
         
         #contenedor {
-            width: 100%;
+            width: 1200px;
             height: 100%;
         }
 
@@ -33,12 +33,7 @@
     <div id="contenedor"></div>
 
     <script>
-        // ---------------------------------------------------------------------
-        // CONFIGURACIÓN:
-        // Pega dentro de la comilla simple el enlace de la pestaña TOTAL
-        // publicado desde Google Sheets (Debe terminar en .../pubhtml?gid=... o /htmlview#gid=...)
-        // ---------------------------------------------------------------------
-        const urlPublicada = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSrmKGhHQsoX9O9B71Pq3z87vmKWtOhHPTPlSF_IzZ_vpKOwRi-xFRQrzrj6cXmOy1fD90FUVkRE7m3/pubhtml?gid=674966579&single=true';
+       const urlPublicada = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSrmKGhHQsoX9O9B71Pq3z87vmKWtOhHPTPlSF_IzZ_vpKOwRi-xFRQrzrj6cXmOy1fD90FUVkRE7m3/pubhtml?gid=674966579&single=true';
 
         // Intervalo de recarga en milisegundos (20000 = 20 segundos)
         const tiempoRecarga = 20000;
