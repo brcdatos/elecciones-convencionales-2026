@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de Votos - Resultados</title>
+    <style>
+        /* Hace que la página ocupe toda la pantalla sin barras de desplazamiento */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f4f4f4;
+        }
+        /* Configura el marco para que llene todo el espacio */
+        #marcoResultados {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PEGA AQUÍ TU ENLACE DE PUBLICACIÓN DE GOOGLE SHEETS -->
+    <iframe id="marcoResultados" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSrmKGhHQsoX9O9B71Pq3z87vmKWtOhHPTPlSF_IzZ_vpKOwRi-xFRQrzrj6cXmOy1fD90FUVkRE7m3/pubhtml?gid=674966579&single=true"></iframe>
+
+    <script>
+        // Define el intervalo de actualización en milisegundos (Ejemplo: 20000 = 20 segundos)
+        const tiempoRecarga = 20000; 
+
+        setInterval(function() {
+            var iframe = document.getElementById('marcoResultados');
+            // Vuelve a asignar la misma URL para forzar al navegador a recargar el contenido
+            iframe.src = iframe.src; 
+        }, tiempoRecarga);
+    </script>
+
+</body>
+</html>
