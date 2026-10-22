@@ -11,23 +11,28 @@
             width: 100%;
             height: 100%;
             background-color: #ffffff;
+            overflow: hidden;
         }
         
         #contenedor {
+            position: relative;
             width: 100%;
             height: 100%;
         }
 
         iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             border: none;
-            /* El iframe empieza invisible para ocultar el proceso de acomodado */
+            /* El iframe nuevo empieza invisible */
             opacity: 0;
             transition: opacity 0.4s ease-in-out;
         }
 
-        /* Cuando carga bien, aparece suavemente ya ordenado */
+        /* Cuando termina de cargar, se vuelve visible */
         iframe.listo {
             opacity: 1;
         }
@@ -47,21 +52,25 @@
             const conector = urlPublicada.includes('?') ? '&' : '?';
             const urlConCacheBuster = urlPublicada + conector + 'nocache=' + timestamp;
 
-            // Creamos el nuevo iframe de manera oculta
             const nuevoIframe = document.createElement('iframe');
-            nuevoIframe.src = urlConCacheBuster;
 
-            // Esperamos a que Google termine de renderizar todo internamente
+            // 1. PRIMERO escuchamos el evento de carga
             nuevoIframe.onload = function() {
-                // Reemplazamos el viejo por el nuevo ya listo
-                contenedor.innerHTML = '';
-                contenedor.appendChild(nuevoIframe);
-                
-                // Un micro-respiro de seguridad y lo hacemos visible suavemente
+                // Hacemos visible el nuevo iframe de forma suave
                 setTimeout(function() {
                     nuevoIframe.classList.add('listo');
+                    
+                    // Eliminamos los iframes anteriores para mantener el sitio liviano
+                    const MarcosViejos = contenedor.querySelectorAll('iframe:not(.listo)');
+                    MarcosViejos.forEach(iframe => iframe.remove());
                 }, 150);
             };
+
+            // 2. Colocamos el iframe en la página
+            contenedor.appendChild(nuevoIframe);
+
+            // 3. ULTIMO: Asignamos la URL para iniciar la carga
+            nuevoIframe.src = urlConCacheBuster;
         }
 
         recargarVista();
