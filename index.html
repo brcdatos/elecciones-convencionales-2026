@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultados en Vivo - Conteo Rápido</title>
+    <title>Resultados en Vivo - Conteo de Votos</title>
     <style>
+        /* Ocupa el 100% de la pantalla sin márgenes ni barras de desplazamiento */
         body, html {
             margin: 0;
             padding: 0;
@@ -13,7 +14,13 @@
             overflow: hidden;
             background-color: #ffffff;
         }
-        #marcoResultados {
+        
+        #contenedor {
+            width: 100%;
+            height: 100%;
+        }
+
+        iframe {
             width: 100%;
             height: 100%;
             border: none;
@@ -22,33 +29,39 @@
 </head>
 <body>
 
-    <div id="contenedor" style="width: 100%; height: 100%;"></div>
+    <!-- Contenedor donde se montará la vista en vivo -->
+    <div id="contenedor"></div>
 
     <script>
-        // 1. Pega aquí el ID de tu planilla (lo que está entre /d/ y /edit en tu enlace de Google Sheets)
-        const idPlanilla = "16GyKH6Ae6bkp7xexO0ZCtPcJK7I3bBkRcd0mHK3fNkw";
-        
-        // 2. Pega aquí el número de GID de tu pestaña TOTAL (lo que aparece después de #gid=)
-        const gidHoja = "674966579"; 
-        
-        // Intervalo en milisegundos (20000 = 20 segundos)
-        const tiempoRecarga = 5000; 
+        // ---------------------------------------------------------------------
+        // CONFIGURACIÓN:
+        // Pega dentro de la comilla simple el enlace de la pestaña TOTAL
+        // publicado desde Google Sheets (Debe terminar en .../pubhtml?gid=... o /htmlview#gid=...)
+        // ---------------------------------------------------------------------
+        const urlPublicada = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSrmKGhHQsoX9O9B71Pq3z87vmKWtOhHPTPlSF_IzZ_vpKOwRi-xFRQrzrj6cXmOy1fD90FUVkRE7m3/pubhtml?gid=674966579&single=true';
 
-        function actualizarIframe() {
-            var contenedor = document.getElementById('contenedor');
+        // Intervalo de recarga en milisegundos (20000 = 20 segundos)
+        const tiempoRecarga = 20000;
+
+        function recargarVista() {
+            const contenedor = document.getElementById('contenedor');
             
-            // Creamos una URL dinámica agregando un parámetro de tiempo (?t=...) al final
-            var urlDinamica = "https://docs.google.com/spreadsheets/d/" + idPlanilla + "/htmlview?t=" + new Date().getTime() + "#gid=" + gidHoja;
+            // Genera un sello de tiempo único para romper la caché local del navegador
+            const timestamp = new Date().getTime();
             
-            // Inyectamos el iframe con la nueva URL forzando la descarga fresca
-            contenedor.innerHTML = '<iframe id="marcoResultados" src="' + urlDinamica + '"></iframe>';
+            // Si la URL ya tiene signos '?', usamos '&', de lo contrario '?'
+            const conector = urlPublicada.includes('?') ? '&' : '?';
+            const urlConCacheBuster = urlPublicada + conector + 'nocache=' + timestamp;
+
+            // Destruye y vuelve a inyectar el iframe con la nueva dirección
+            contenedor.innerHTML = '<iframe src="' + urlConCacheBuster + '"></iframe>';
         }
 
-        // Ejecutar inmediatamente al cargar la página
-        actualizarIframe();
+        // Ejecuta la primera carga apenas abre la página
+        recargarVista();
 
-        // Repetir el proceso cada 20 segundos
-        setInterval(actualizarIframe, tiempoRecarga);
+        // Repite la recarga automáticamente según el tiempo configurado
+        setInterval(recargarVista, tiempoRecarga);
     </script>
 
 </body>
