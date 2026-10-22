@@ -5,89 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados en Vivo - Conteo Rápido</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #111;
-            color: #fff;
+        body, html {
             margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 { margin-bottom: 10px; font-size: 24px; text-align: center; }
-        #tabla-container {
+            padding: 0;
             width: 100%;
-            max-width: 900px;
-            margin-top: 20px;
+            height: 100%;
+            overflow: hidden;
+            background-color: #ffffff;
         }
-        table {
+        #marcoResultados {
             width: 100%;
-            border-collapse: collapse;
-            background-color: #222;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #444;
-            font-size: 18px;
-        }
-        th { background-color: #0056b3; }
-        tr:hover { background-color: #333; }
-        .actualizando {
-            font-size: 12px;
-            color: #888;
-            margin-top: 10px;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
 <body>
 
-    <h1>Seguimiento de Resultados</h1>
-    <div class="actualizando" id="estado">Conectando con la base de datos...</div>
-
-    <div id="tabla-container">
-        <table id="resultadosTable">
-            <!-- Los datos se cargarán aquí automáticamente -->
-        </table>
-    </div>
+    <!-- PEGA AQUÍ TU ENLACE ADAPTADO CON htmlview -->
+    <iframe id="marcoResultados" src="https://docs.google.com/spreadsheets/d/16GyKH6Ae6bkp7xexO0ZCtPcJK7I3bBkRcd0mHK3fNkw/htmlview?gid=674966579#gid=674966579"></iframe>
 
     <script>
-        // PEGA AQUÍ LA URL DE TU APLICACIÓN WEB DE APPS SCRIPT
-        const urlAPI = "https://script.google.com/macros/s/AKfycbz9W-AzrTCqd3AZI6D9g2AipkXwdPeumIzi20ZKFaDRpBGa7vbHyaIDR7MQGiRSQJ1bzA/exec";
+        // Define cada cuántos segundos se recarga el marco (Ejemplo: 20000 = 20 segundos)
+        const tiempoRecarga = 20000; 
 
-        function cargarResultados() {
-            fetch(urlAPI)
-                .then(response => response.json())
-                .then(data => {
-                    const table = document.getElementById('resultadosTable');
-                    table.innerHTML = ""; // Limpia la tabla anterior
-
-                    data.forEach((row, rowIndex) => {
-                        let tr = document.createElement('tr');
-                        row.forEach(cell => {
-                            let cellTag = rowIndex === 0 ? 'th' : 'td';
-                            let td = document.createElement(cellTag);
-                            td.textContent = cell !== null ? cell : "";
-                            tr.appendChild(td);
-                        });
-                        table.appendChild(tr);
-                    });
-
-                    document.getElementById('estado').textContent = "Última actualización: " + new Date().toLocaleTimeString();
-                })
-                .catch(error => {
-                    console.error('Error al actualizar:', error);
-                    document.getElementById('estado').textContent = "Reintentando conexión...";
-                });
-        }
-
-        // Carga inmediata al abrir la página
-        cargarResultados();
-
-        // Se vuelve a ejecutar cada 5 segundos (5000 milisegundos)
-        setInterval(cargarResultados, 5000);
+        setInterval(function() {
+            var iframe = document.getElementById('marcoResultados');
+            iframe.src = iframe.src; // Fuerza al navegador a refrescar la vista
+        }, tiempoRecarga);
     </script>
 
 </body>
